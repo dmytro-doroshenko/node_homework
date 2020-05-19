@@ -8,13 +8,13 @@ function toggleContent (dir_A, dir_B) {
       !exists && createDir(dir_temp);
    });
    readdir(dir_A, (err, files) => {
-      err && console.log(`error while reading files from ${dir_A}` ,err);
+      err && console.log(err);
       moveFiles(dir_A, dir_temp, files);
       readdir(dir_B, (err, files) => {
-         err && console.log(`error while reading files from ${dir_B}` ,err);
+         err && console.log(err);
          moveFiles(dir_B, dir_A, files);
          readdir(dir_temp, (err, files) => {
-            err && console.log(`error while reading files from ${dir_temp}` ,err);
+            err && console.log(err);
             moveFiles(dir_temp, dir_B, files);
             removeDir(dir_temp);
          });
@@ -25,20 +25,20 @@ function toggleContent (dir_A, dir_B) {
 function moveFiles (dirFrom, dirTo, filesToMove) {
    filesToMove.forEach(file => {
       rename(join(dirFrom, file), join(dirTo, file), err => {
-         err && console.log(`error while moving file ${file} from ${dirFrom} to ${dirTo}`, err);
+         err && console.log(err);
       });
    });
 }
 
 function createDir (dir) {
    mkdir(dir, err => {
-      err && console.log(`error while creating ${dir}:`, err);
+      err && console.log(err);
    });
 }
 
 function removeDir (dir) {
    rmdir(dir, err => {
-      err && console.log(`error while removing ${dir}:`, err);
+      err && console.log(err);
    });
 }
 
