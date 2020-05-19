@@ -8,13 +8,22 @@ function toggleContent (dir_A, dir_B) {
       !exists && createDir(dir_temp);
    });
    readdir(dir_A, (err, files) => {
-      err && console.log(err);
+      if (err) {
+         console.log(err);
+         return;
+      }
       moveFiles(dir_A, dir_temp, files);
       readdir(dir_B, (err, files) => {
-         err && console.log(err);
+         if (err) {
+            console.log(err);
+            return;
+         }
          moveFiles(dir_B, dir_A, files);
          readdir(dir_temp, (err, files) => {
-            err && console.log(err);
+            if (err) {
+               console.log(err);
+               return;
+            }
             moveFiles(dir_temp, dir_B, files);
             removeDir(dir_temp);
          });
