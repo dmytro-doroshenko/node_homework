@@ -10,7 +10,7 @@ let registeredUsers;
 const app = express();
 
 readFile(join(__dirname, 'usersList.txt'), (err, users) => {
-   registeredUsers = JSON.parse(users && users.toString()) || [];
+   registeredUsers = JSON.parse(users.toString()) || [];
 });
 
 app.use(express.json());
