@@ -1,0 +1,5 @@
+{"id": 1,"title":"Brown eggs","price":28.1}
+{"id": 2,"title":"Sweet fresh strawberry","price":29.45}
+{"id": 3,"title":"Green smoothie","price":17.68}
+{"id": 4,"title":"Baking cake","price":11.14}
+{"id": 5,"title":"Hazelnut in black ceramic bowl","price":27.35}
