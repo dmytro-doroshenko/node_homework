@@ -8,6 +8,7 @@ module.exports = {
 
     getProductByID: async (req, res) => {
         const { id } = req.params;
+
         const products = await productService.getProducts();
         const productToSend = await products.find(product => +product.id === +id);
 
