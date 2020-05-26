@@ -4,7 +4,6 @@ const path = require('path');
 const productsPath = path.join(process.cwd(), 'productsList.txt');
 
 class ProductService {
-
     getProducts() {
         let productsList = [];
 
@@ -48,8 +47,8 @@ class ProductService {
                 }
                 resolve();
             });
-        })
-    }
+        });
+    };
 }
 
 module.exports = new ProductService;

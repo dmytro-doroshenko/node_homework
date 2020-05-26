@@ -1,5 +1,4 @@
-
-const {productService} = require('../../services')
+const { productService } = require('../../services')
 
 module.exports = {
     getAllProducts: async (req, res) => {
@@ -8,7 +7,7 @@ module.exports = {
     },
 
     getProductByID: async (req, res) => {
-        const {id} = req.params;
+        const { id } = req.params;
         const products = await productService.getProducts();
         const productToSend = await products.find(product => +product.id === +id);
 
@@ -22,11 +21,13 @@ module.exports = {
     },
 
     deleteProduct: async (req, res) => {
-        const {id} = req.params;
+        const { id } = req.params;
 
         const products = await productService.getProducts();
         const filteredProducts = await products.filter(product => +product.id !== +id);
+
         await productService.truncateProducts();
+
         filteredProducts.forEach(product => {
            productService.addProduct(product);
         });
@@ -34,10 +35,12 @@ module.exports = {
     },
 
     updateProduct: async (req, res) => {
-        const {id} = req.params;
-        const {title, price} = req.body;
+        const { id } = req.params;
+        const { title, price } = req.body;
         const products = await productService.getProducts();
+
         await productService.truncateProducts();
+
         products.forEach(product => {
             if (+product.id === +id) {
                 if (title) {
@@ -49,7 +52,7 @@ module.exports = {
             }
             productService.addProduct(product);
         });
+
         res.redirect('/products');
     },
-
 };

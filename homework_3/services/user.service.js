@@ -4,7 +4,6 @@ const path = require('path');
 const usersPath = path.join(process.cwd(), 'usersList.txt');
 
 class UserService {
-
     getUsers() {
         let users = [];
 
@@ -20,12 +19,12 @@ class UserService {
                     if (!jsonUser) {
                         return
                     }
-                    users.push(JSON.parse(jsonUser))
-                })
+                    users.push(JSON.parse(jsonUser));
+                });
                 resolve(users);
-            })
-        })
-    }
+            });
+        });
+    };
 
     createUser(user) {
         const userToPush = JSON.stringify(user);
@@ -36,9 +35,9 @@ class UserService {
                     reject('Cant write user');
                 }
                 resolve();
-            })
-        })
-    }
+            });
+        });
+    };
 }
 
 module.exports = new UserService;

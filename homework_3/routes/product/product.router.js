@@ -1,9 +1,9 @@
 const { Router } = require('express');
+const { productController } = require('../../controllers');
+const { getAllProducts, getProductByID, addNewProduct, deleteProduct, updateProduct } = productController;
+const { checkEmptyFields, checkProductID, checkPrice } = require('../../middlewares/product');
 
 const productRouter = Router();
-const { productController } = require('../../controllers');
-const {getAllProducts, getProductByID, addNewProduct, deleteProduct, updateProduct} = productController;
-const {checkEmptyFields, checkProductID} = require('../../middlewares/product')
 
 productRouter.get('/', getAllProducts);
 
@@ -11,7 +11,7 @@ productRouter.get('/:id', getProductByID);
 
 productRouter.post('/', checkEmptyFields, checkProductID, addNewProduct);
 
-productRouter.put('/:id', updateProduct);
+productRouter.put('/:id', checkPrice, updateProduct);
 
 productRouter.delete('/:id', deleteProduct);
 

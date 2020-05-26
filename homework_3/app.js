@@ -1,7 +1,7 @@
 const express = require('express');
 const expBars = require('express-handlebars');
-const {join} = require('path');
-const {userRouter, productRouter} = require('./routes');
+const { join } = require('path');
+const { userRouter, productRouter } = require('./routes');
 
 const app = express();
 
@@ -13,11 +13,11 @@ app.use(express.static(join(__dirname, 'views')));
 app.engine('hbs', expBars({
     extname: 'hbs',
     defaultLayout: false,
-}))
+}));
 
 app.get('/', (req, res) => {
     res.render('main');
-})
+});
 
 app.use('/users', userRouter);
 app.use('/products', productRouter);
