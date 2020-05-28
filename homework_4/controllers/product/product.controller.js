@@ -10,7 +10,9 @@ module.exports = {
         const { id } = req.params;
         const productToSend = await productService.getProductByID(id);
 
-        res.json(productToSend);
+        productToSend
+            ? res.json(productToSend)
+            : res.send(`Product with id ${id} not found`);
     },
 
     addNewProduct: async (req, res) => {

@@ -20,8 +20,6 @@ module.exports = {
         if (product.length) {
             return product;
         }
-
-        return `Product with id ${productID} not found`;
     },
     addProduct: async (product) => {
         const ProductModel = db.getModel('Product');
@@ -38,12 +36,10 @@ module.exports = {
         });
         return status;
     },
-    updateProduct: async (productID, params) => {
+    updateProduct: async (productID, obj) => {
         const ProductModel = db.getModel('Product');
 
-        const status = await ProductModel.update({
-            ...params,
-        }, {
+        const status = await ProductModel.update(obj, {
             where: {
                 id: productID,
             }
