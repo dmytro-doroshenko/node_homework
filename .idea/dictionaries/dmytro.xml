@@ -2,7 +2,12 @@
   <dictionary name="dmytro">
     <words>
       <w>bcrypt</w>
+      <w>dotenv</w>
+      <w>dvwum</w>
+      <w>nodemailer</w>
+      <w>rgly</w>
       <w>sequelize</w>
+      <w>smtp</w>
     </words>
   </dictionary>
 </component>
