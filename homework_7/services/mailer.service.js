@@ -1,15 +1,16 @@
-const {OWU_WEBSITE, PRODUCTS_LINK} = require('../config');
-const {
-    ROOT_EMAIL,
-    ROOT_EMAIL_HOST,
-    ROOT_EMAIL_PORT,
-    ROOT_EMAIL_PASS,
-    ROOT_EMAIL_SECURE
-} = require('../config');
 const nodemailer = require('nodemailer');
 const EmailTemplates = require('email-templates');
 const {join} = require('path');
 
+const {
+    PRODUCTS_LINK,
+    ROOT_EMAIL,
+    ROOT_EMAIL_HOST,
+    ROOT_EMAIL_PORT,
+    ROOT_EMAIL_PASS,
+    ROOT_EMAIL_SECURE,
+    OWU_WEBSITE
+} = require('../config');
 const htmlTemplates = require('../email-templates');
 
 const transporter = nodemailer.createTransport({
@@ -25,7 +26,7 @@ const transporter = nodemailer.createTransport({
 const emailTemplate = new EmailTemplates( {
     message: null,
     views: {
-        root: join(process.cwd(), 'email-templates')
+        root: join(process.cwd(), 'email-templates'),
     }
 })
 

@@ -3,7 +3,7 @@ const ErrorsHandler = require('../../errors/ErrorsHandler');
 const {hashPassword} = require('../../helper');
 const {userService, mailerService} = require('../../services');
 
-const {USER_CREATE} = emailActions;
+const {USER_CREATE, USER_DELETE, USER_UPDATE} = emailActions;
 const {USER_NOT_FOUND} = errors;
 const {NOT_FOUND, OK} = httpStatusCodes;
 
@@ -32,12 +32,17 @@ module.exports = {
     deleteUser: async (req, res, next) => {
         const {id} = req.params;
 
-        const isDeleted = await userService.deleteUser(id);
+        const userInfo = await userService.getUserByParams({id});
 
-        if (!isDeleted) {
+        const isDeleted = await userService.deleteUser(+id);
+        console.log('isDeleted', isDeleted)
+        if (!userInfo || !isDeleted) {
             return next(new ErrorsHandler(USER_NOT_FOUND.message, NOT_FOUND, USER_NOT_FOUND.code))
         }
 
+        await mailerService.sendMail(userInfo.dataValues.email, USER_DELETE, {
+            userEmail: userInfo.dataValues.email
+        });
 
         res.sendStatus(OK)
     }

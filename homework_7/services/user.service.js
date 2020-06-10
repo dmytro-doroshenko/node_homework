@@ -25,7 +25,7 @@ module.exports = {
         const UserModel = db.getModel(USER);
 
         return UserModel.destroy( {
-            where: id
+            where: {id}
         });
     },
 
