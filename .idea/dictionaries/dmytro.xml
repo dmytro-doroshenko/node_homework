@@ -4,10 +4,25 @@
       <w>bcrypt</w>
       <w>dotenv</w>
       <w>dvwum</w>
+      <w>mimetype</w>
+      <w>mimetypes</w>
+      <w>mpeg</w>
+      <w>msword</w>
       <w>nodemailer</w>
+      <w>officedocument</w>
+      <w>opendocument</w>
+      <w>openxmlformats</w>
+      <w>pjpeg</w>
+      <w>presentationml</w>
+      <w>quicktime</w>
+      <w>realaudio</w>
       <w>rgly</w>
       <w>sequelize</w>
       <w>smtp</w>
+      <w>spreadsheetml</w>
+      <w>vorbis</w>
+      <w>wbmp</w>
+      <w>wordprocessingml</w>
     </words>
   </dictionary>
 </component>
