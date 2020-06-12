@@ -4,7 +4,7 @@ const {modelNames} = require('../constants');
 const {USER} = modelNames;
 
 module.exports = {
-    getUsers: async () => {
+    getUsers: () => {
         const UserModel = db.getModel(USER);
 
         return UserModel.findAll({});

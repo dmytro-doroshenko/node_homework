@@ -4,6 +4,11 @@ const {modelNames} = require('../constants');
 const {TOKEN} = modelNames;
 
 module.exports = {
+    getAllTokens: () => {
+        const TokenModel = db.getModel(TOKEN);
+
+        return TokenModel.findAll({});
+    },
     createTokensPair: (tokens) => {
         const TokenModel = db.getModel(TOKEN);
 

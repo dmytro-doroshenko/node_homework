@@ -1,6 +1,6 @@
-const {modelNames, database, words} = require('../../constants');
+const {TOKENS_TABLE} = require('../../config');
+const {modelNames, words} = require('../../constants');
 
-const {TOKENS_TABLE} = database;
 const {TOKEN} = modelNames;
 const {NOW} = words;
 

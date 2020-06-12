@@ -1,3 +1,7 @@
+const fsExtra = require('fs-extra').promises;
+const {resolve} = require('path');
+const uuid = require('uuid').v1();
+
 const {emailActions, errors, httpStatusCodes} = require('../../constants');
 const ErrorsHandler = require('../../errors/ErrorsHandler');
 const {mailerService, productService, userService} = require('../../services');
@@ -5,7 +9,7 @@ const {mailerService, productService, userService} = require('../../services');
 const {PRODUCT_CREATE, PRODUCT_DELETE, PRODUCT_UPDATE} = emailActions
 const {PRODUCT_NOT_FOUND, PRODUCT_NOT_FOUND_TO_DELETE, PRODUCT_NOT_FOUND_TO_UPDATE} = errors;
 const {NOT_FOUND, OK} = httpStatusCodes;
-const {getProducts, getProductByID} = productService;
+const {getProducts, getProductByID, updateProduct} = productService;
 
 module.exports = {
     getAllProducts: async (req, res) => {
@@ -27,19 +31,30 @@ module.exports = {
 
     addNewProduct: async (req, res, next) => {
         try {
-            await productService.addProduct(req.body);
+            const [photo] = req.photos;
+            const {id} = await productService.addProduct(req.body);
+            const photosDir = `products/${id}/photos`;
+            const fileExtension = photo.name.split('.').pop();
+            const photoName = `${uuid}.${fileExtension}`;
+
+            await fsExtra.mkdir(resolve(process.cwd(), 'public', photosDir), {recursive: true});
+
+            await photo.mv(resolve(process.cwd(), 'public', photosDir, photoName));
+
+            await updateProduct(id, {photo: `${photosDir}/${photoName}`});
+
+            const userInfo = await userService.getUserByParams({id: req.userId});
+
+            await mailerService.sendMail(userInfo.dataValues.email, PRODUCT_CREATE, {
+                productName: req.body.name,
+                userName: userInfo.dataValues.name,
+                userEmail: userInfo.dataValues.email
+            });
+
+
         } catch (e) {
-            return next(new ErrorsHandler(e.message));
+            return next(new ErrorsHandler(e));
         }
-
-        const userInfo = await userService.getUserByParams({id: req.userId});
-
-        await mailerService.sendMail(userInfo.dataValues.email, PRODUCT_CREATE, {
-            productName: req.body.name,
-            userName: userInfo.dataValues.name,
-            userEmail: userInfo.dataValues.email
-        });
-
         res.sendStatus(OK);
     },
 

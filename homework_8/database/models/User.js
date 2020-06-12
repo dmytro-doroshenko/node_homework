@@ -1,7 +1,7 @@
-const {modelNames, database} = require('../../constants');
+const {USERS_TABLE} = require('../../config');
+const {modelNames} = require('../../constants');
 
 const {USER} = modelNames;
-const {USERS_TABLE} = database;
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(USER, {

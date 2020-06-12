@@ -1,4 +1,3 @@
-const database = require('./database.enum');
 const emailActions = require('./emailActions.enum');
 const errors = require('./errors.enum');
 const fileOptions = require('./filesOptions');
@@ -9,7 +8,6 @@ const requestHeaders = require('./requestHeaders.enum');
 const words = require('./words.enum');
 
 module.exports = {
-    database,
     emailActions,
     errors,
     fileOptions,

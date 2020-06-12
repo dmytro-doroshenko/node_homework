@@ -2,10 +2,10 @@ const db = require('../database').getInstance();
 const {modelNames: {PRODUCT}} = require('../constants');
 
 module.exports = {
-        addProduct: async (product) => {
+    addProduct: (product) => {
         const ProductModel = db.getModel(PRODUCT);
 
-        await ProductModel.create(product);
+        return ProductModel.create(product);
     },
     deleteProduct: (productID) => {
         const ProductModel = db.getModel(PRODUCT);

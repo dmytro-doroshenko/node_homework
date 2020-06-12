@@ -1,5 +1,5 @@
-const nodemailer = require('nodemailer');
 const EmailTemplates = require('email-templates');
+const nodemailer = require('nodemailer');
 const {join} = require('path');
 
 const {

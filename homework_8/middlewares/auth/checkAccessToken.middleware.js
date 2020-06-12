@@ -1,13 +1,12 @@
-const {words} = require('../../constants');
+const {JWT_ACCESS_SECRET} = require('../../config');
+const {errors, httpStatusCodes, requestHeaders} = require('../../constants');
+const {tokensVerificator} = require('../../helper');
 const ErrorsHandler = require('../../errors/ErrorsHandler');
 const  {authService} = require('../../services');
-const {tokensVerificator} = require('../../helper');
-const {errors, httpStatusCodes, requestHeaders} = require('../../constants');
 
 const {TOKEN_NOT_VALID} = errors;
 const {UNAUTHORIZED} = httpStatusCodes;
 const {AUTHORIZATION} = requestHeaders;
-const {JWT_ACCESS_SECRET} = words;
 
 module.exports = async (req, res, next) => {
         const token = req.get(AUTHORIZATION);

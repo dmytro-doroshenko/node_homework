@@ -1,6 +1,5 @@
 const {modelNames: {PRODUCT}} = require('../../constants');
-const {database} = require('../../constants');
-const {PRODUCTS_TABLE} = database;
+const {PRODUCTS_TABLE} = require('../../config');
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define(PRODUCT, {
@@ -21,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
             price: {
                 type: DataTypes.DECIMAL,
                 allowNull: false,
+            },
+            photo: {
+                type: DataTypes.STRING,
+                allowNull: true,
             }
         },
         {

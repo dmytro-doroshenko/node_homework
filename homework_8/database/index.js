@@ -2,8 +2,7 @@ const Sequelize = require('sequelize');
 const {readdir} = require('fs');
 const {join} = require('path');
 
-const {database} = require('../constants');
-const {DB_NAME, DB_LOGIN, DB_PASSWORD, DB_HOST, DB_DIALECT} = database;
+const {DB_NAME, DB_LOGIN, DB_PASSWORD, DB_HOST, DB_DIALECT} = require('../config');
 
 module.exports = (() => {
     let instance;

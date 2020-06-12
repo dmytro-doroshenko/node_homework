@@ -47,7 +47,7 @@ app.use('*', (err, req, res, next) => {
 app.set('view engine', 'hbs');
 app.set('views', join(__dirname, 'views'));
 
-// cronRun();
+cronRun();
 
 app.listen(PORT, err => {
     if (err) {

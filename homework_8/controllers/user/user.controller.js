@@ -1,5 +1,5 @@
-const fsExtra = require('fs-extra');
-const path = require('path');
+const fsExtra = require('fs-extra').promises;
+const {resolve} = require('path');
 const uuid = require('uuid').v1();
 
 const {emailActions, errors, httpStatusCodes} = require('../../constants');
@@ -18,30 +18,32 @@ module.exports = {
 
         res.json(users);
     },
-    createUser: async (req, res) => {
-        const user = req.body;
-        const [avatar] = req.photos;
+    createUser: async (req, res, next) => {
+        try {
+            const user = req.body;
+            const [avatar] = req.photos;
 
-        user.password = await hashPassword(user.password);
+            user.password = await hashPassword(user.password);
 
-        const {id} = await userService.createUser(user);
-        const photosDir = `users/${id}/photos`;
+            const {id} = await userService.createUser(user);
+            const photosDir = `users/${id}/photos`;
+            const fileExtension = avatar.name.split('.').pop();
+            const photoName = `${uuid}.${fileExtension}`;
 
-        const fileExtention = avatar.name.split('.').pop();
-        const photoName = `${uuid}.${fileExtention}`;
+            await fsExtra.mkdir(resolve(process.cwd(), 'public', photosDir), {recursive: true});
+            await avatar.mv(resolve(process.cwd(), 'public', photosDir, photoName));
 
-        await fsExtra.mkdir(path.resolve(process.cwd(), 'public', photosDir), {recursive: true})
-        // {recursive: true} ?????????????????????
+            await userService.updateUserById(id, {photo: `${photosDir}/${photoName}`})
+            await mailerService.sendMail(user.email, USER_CREATE, {
+                userName: user.name,
+            });
 
-        await avatar.mv(path.resolve(process.cwd(), 'public', photosDir, photoName));
+            res.sendStatus(OK);
+        }
+        catch (e) {
+            return next(new ErrorsHandler(e));
+        }
 
-        await userService.updateUserById(id, {photo: `${photosDir}/${photoName}`})
-
-        await mailerService.sendMail(user.email, USER_CREATE, {
-            userName: user.name,
-        });
-
-        res.sendStatus(OK);
     },
 
     deleteUser: async (req, res, next) => {

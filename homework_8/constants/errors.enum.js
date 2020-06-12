@@ -1,7 +1,7 @@
 module.exports = {
     // BAD REQUEST
     ONLY_IMAGES_ALLOWED: {
-        message: 'You can upload ONLY images',
+        message: 'You can upload ONLY images!',
         code: 4001,
     },
     FILE_NOT_VALID: {
@@ -11,6 +11,10 @@ module.exports = {
     FILE_SIZE_EXCEEDED: {
         message: (fileSizeInBytes) => `Max file size is ${fileSizeInBytes / 1024 / 1024} MB`,
         code: 4003,
+    },
+    ONLY_ONE_IMAGE_ALLOWED: {
+        message: 'You can upload ONLY ONE image!',
+        code: 4004,
     },
 
     // UNAUTHORIZED
