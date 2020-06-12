@@ -1,15 +1,20 @@
-const fsExtra = require('fs-extra').promises;
-const {resolve} = require('path');
-const uuid = require('uuid').v1();
-
-const {emailActions, errors, httpStatusCodes} = require('../../constants');
+const {emailActions, errors, httpStatusCodes, modelNames} = require('../../constants');
 const ErrorsHandler = require('../../errors/ErrorsHandler');
-const {mailerService, productService, userService} = require('../../services');
+const {mailerService, productService, photoService, userService} = require('../../services');
 
 const {PRODUCT_CREATE, PRODUCT_DELETE, PRODUCT_UPDATE} = emailActions
-const {PRODUCT_NOT_FOUND, PRODUCT_NOT_FOUND_TO_DELETE, PRODUCT_NOT_FOUND_TO_UPDATE} = errors;
+const {
+    PHOTO_NOT_FOUND_TO_DELETE,
+    PRODUCT_NOT_FOUND,
+    PRODUCT_NOT_FOUND_TO_DELETE,
+    PRODUCT_NOT_FOUND_TO_UPDATE
+} = errors;
 const {NOT_FOUND, OK} = httpStatusCodes;
-const {getProducts, getProductByID, updateProduct} = productService;
+const {sendMail} = mailerService;
+const {PRODUCT} = modelNames;
+const {addPhoto, removePhoto} = photoService;
+const {addProduct, deleteProduct, getProducts, getProductByID, updateProduct} = productService;
+const {getUserByParams} = userService;
 
 module.exports = {
     getAllProducts: async (req, res) => {
@@ -32,26 +37,22 @@ module.exports = {
     addNewProduct: async (req, res, next) => {
         try {
             const [photo] = req.photos;
-            const {id} = await productService.addProduct(req.body);
-            const photosDir = `products/${id}/photos`;
-            const fileExtension = photo.name.split('.').pop();
-            const photoName = `${uuid}.${fileExtension}`;
+            req.body.userId = req.userId;
+            const {id} = await addProduct(req.body);
 
-            await fsExtra.mkdir(resolve(process.cwd(), 'public', photosDir), {recursive: true});
+            if (photo) {
+                const photosDir = `products/${id}/photos`;
 
-            await photo.mv(resolve(process.cwd(), 'public', photosDir, photoName));
+                await addPhoto(photo, PRODUCT, photosDir, id)
+            }
 
-            await updateProduct(id, {photo: `${photosDir}/${photoName}`});
+            const userInfo = await getUserByParams({id: req.userId});
 
-            const userInfo = await userService.getUserByParams({id: req.userId});
-
-            await mailerService.sendMail(userInfo.dataValues.email, PRODUCT_CREATE, {
+            await sendMail(userInfo.dataValues.email, PRODUCT_CREATE, {
                 productName: req.body.name,
                 userName: userInfo.dataValues.name,
                 userEmail: userInfo.dataValues.email
             });
-
-
         } catch (e) {
             return next(new ErrorsHandler(e));
         }
@@ -61,7 +62,7 @@ module.exports = {
     deleteProduct: async (req, res, next) => {
         const {id} = req.params;
 
-        const isDeleted = await productService.deleteProduct(id);
+        const isDeleted = await deleteProduct(id);
 
         if (!isDeleted) {
             return next(new ErrorsHandler(
@@ -71,19 +72,39 @@ module.exports = {
             ));
         }
 
-        const userInfo = await userService.getUserByParams({id: req.userId});
+        const userInfo = await getUserByParams({id: req.userId});
 
-        await mailerService.sendMail(userInfo.dataValues.email, PRODUCT_DELETE, {
+        await sendMail(userInfo.dataValues.email, PRODUCT_DELETE, {
             productName: req.body.name
         });
 
         res.sendStatus(OK);
     },
 
+    deleteProductPhoto: async (req, res, next) => {
+        try {
+            const {id} = req.params;
+
+            const [isDeleted] = await removePhoto(PRODUCT, id);
+
+            if (!isDeleted) {
+                return next(new ErrorsHandler(
+                    PHOTO_NOT_FOUND_TO_DELETE.message,
+                    NOT_FOUND,
+                    PHOTO_NOT_FOUND_TO_DELETE.code));
+            }
+
+            res.sendStatus(OK);
+        }
+        catch (e) {
+            return next (new ErrorsHandler(e))
+        }
+    },
+
     updateProduct: async (req, res, next) => {
         const {id} = req.params;
 
-        const isUpdated = await productService.updateProduct(id, req.body);
+        const isUpdated = await updateProduct(id, req.body);
 
         if (!isUpdated) {
             return next(new ErrorsHandler(
@@ -93,10 +114,10 @@ module.exports = {
             ));
         }
 
-        const userInfo = await userService.getUserByParams({id: req.userId});
+        const userInfo = await getUserByParams({id: req.userId});
 
-        await mailerService.sendMail(userInfo.dataValues.email, PRODUCT_UPDATE, {
-            productName: req.body.name
+        await sendMail(userInfo.dataValues.email, PRODUCT_UPDATE, {
+            productName: req.body.name,
         });
 
         res.sendStatus(OK);

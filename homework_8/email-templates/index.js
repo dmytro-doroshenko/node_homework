@@ -3,6 +3,7 @@ const {emailActions} = require('../constants');
 const {
     PRODUCT_CREATE,
     PRODUCT_DELETE,
+    PRODUCT_NO_PHOTO,
     PRODUCT_UPDATE,
     USER_CREATE,
     USER_DELETE,
@@ -18,6 +19,10 @@ module.exports = {
     [PRODUCT_DELETE]: {
         subject: 'Product was DELETED from the DB',
         templateFileName: 'productDelete'
+    },
+    [PRODUCT_NO_PHOTO]: {
+        subject: 'Your Product does not have photo!',
+        templateFileName: 'productWithoutPhoto'
     },
     [PRODUCT_UPDATE]: {
         subject: 'Product was updated in the DB',

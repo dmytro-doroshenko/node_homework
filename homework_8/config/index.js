@@ -1,6 +1,6 @@
 module.exports = {
     // ---------- cron job info ----------
-    CRON_JOB_PERIOD: process.env.CRON_JOB_PERIOD || '* * * * * *',
+    CRON_JOB_PERIOD: process.env.CRON_JOB_PERIOD || '0 0 * * * ',
 
     // ---------- database info ----------
     DB_NAME: process.env.DB_NAME || 'database_name',

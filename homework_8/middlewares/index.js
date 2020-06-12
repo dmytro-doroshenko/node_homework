@@ -1,4 +1,5 @@
 const checkAccessToken = require('./auth/checkAccessToken.middleware');
+const checkAccessToPhoto = require('./photo/checkAccessToPhoto.middleware');
 const checkAvatarPhotoCount = require('./files/checkAvatarPhotoCount.middleware');
 const checkFileTypes = require('./files/checkFileTypes.middleware');
 const checkIsLoginDataValidity = require('./auth/checkIsLoginDataValid.middleware')
@@ -9,6 +10,7 @@ const checkUserValidity = require('./user/checkIsUserValid.middleware');
 
 module.exports = {
     checkAccessToken,
+    checkAccessToPhoto,
     checkAvatarPhotoCount,
     checkFileTypes,
     checkIsLoginDataValidity,

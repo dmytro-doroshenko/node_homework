@@ -1,8 +1,9 @@
 module.exports = {
     PRODUCT_CREATE: '0',
     PRODUCT_DELETE: '1',
-    PRODUCT_UPDATE: '2',
-    USER_CREATE: '3',
-    USER_DELETE: '4',
-    USER_UPDATE: '5',
+    PRODUCT_NO_PHOTO: '2',
+    PRODUCT_UPDATE: '3',
+    USER_CREATE: '4',
+    USER_DELETE: '5',
+    USER_UPDATE: '6',
 }

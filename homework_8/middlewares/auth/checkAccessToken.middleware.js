@@ -15,11 +15,11 @@ module.exports = async (req, res, next) => {
             return next(new ErrorsHandler(TOKEN_NOT_VALID.message, UNAUTHORIZED, TOKEN_NOT_VALID.code));
         }
 
-        await tokensVerificator(token, JWT_ACCESS_SECRET);
+        const tokenNotValid = await tokensVerificator(token, JWT_ACCESS_SECRET);
 
         const tokensFromDB = await authService.getTokensByParams({accessToken: token});
 
-        if (!tokensFromDB) {
+        if (tokenNotValid || !tokensFromDB) {
             return next(new ErrorsHandler(TOKEN_NOT_VALID.message, UNAUTHORIZED, TOKEN_NOT_VALID.code));
         }
 

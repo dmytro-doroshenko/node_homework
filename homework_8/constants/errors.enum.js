@@ -1,5 +1,5 @@
 module.exports = {
-    // BAD REQUEST
+    // 400: BAD REQUEST
     ONLY_IMAGES_ALLOWED: {
         message: 'You can upload ONLY images!',
         code: 4001,
@@ -17,14 +17,17 @@ module.exports = {
         code: 4004,
     },
 
-    // UNAUTHORIZED
+    // 401: UNAUTHORIZED
     TOKEN_NOT_VALID: {
         message: 'Token not valid',
         code: 4011,
     },
 
-    // FORBIDDEN
-
+    // 403: FORBIDDEN
+    NO_ACCESS_TO_DELETE_PHOTO:{
+        message: 'You don\'t have access to delete this photo!',
+        code: 4031,
+    },
 
     // 404: NOT FOUND
     USER_NOT_FOUND: {
@@ -43,4 +46,8 @@ module.exports = {
         message: 'Product not found. Nothing has been updated',
         code: 4044,
     },
+    PHOTO_NOT_FOUND_TO_DELETE: {
+        message: 'There is no photo in profile. Nothing to delete!',
+        code: 4045,
+    }
 };

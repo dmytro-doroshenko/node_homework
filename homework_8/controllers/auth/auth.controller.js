@@ -29,6 +29,7 @@ module.exports = {
             next(e);
         }
     },
+
     logoutUser: async (req, res) => {
         const accessToken = req.get(AUTHORIZATION);
 
@@ -36,6 +37,7 @@ module.exports = {
 
         res.sendStatus(OK);
     },
+
     extendAuthorization: async (req, res, next) => {
         try {
             const refreshToken = req.get(AUTHORIZATION);

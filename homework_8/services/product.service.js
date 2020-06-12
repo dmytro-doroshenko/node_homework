@@ -7,6 +7,7 @@ module.exports = {
 
         return ProductModel.create(product);
     },
+
     deleteProduct: (productID) => {
         const ProductModel = db.getModel(PRODUCT);
 
@@ -16,11 +17,13 @@ module.exports = {
             }
         });
     },
+
     getProducts: () => {
         const ProductModel = db.getModel(PRODUCT);
 
         return ProductModel.findAll({});
     },
+
     getProductByID: async (productID) => {
         const ProductModel = db.getModel(PRODUCT);
 
@@ -34,6 +37,13 @@ module.exports = {
             return product;
         }
     },
+
+    getProductsWithoutPhoto: async () => {
+        const ProductModel = db.getModel(PRODUCT);
+
+        return ProductModel.findAll({where: {photo: null}});
+    },
+
     updateProduct: async (productID, obj) => {
         const ProductModel = db.getModel(PRODUCT);
 

@@ -1,23 +1,14 @@
-const fsExtra = require('fs-extra').promises;
-const {resolve} = require('path');
-const uuid = require('uuid').v1();
-
-const {emailActions, errors, httpStatusCodes} = require('../../constants');
+const {emailActions, errors, httpStatusCodes, modelNames} = require('../../constants');
 const ErrorsHandler = require('../../errors/ErrorsHandler');
 const {hashPassword} = require('../../helper');
-const {userService, mailerService} = require('../../services');
+const {userService, mailerService, photoService} = require('../../services');
 
 const {USER_CREATE, USER_DELETE, USER_UPDATE} = emailActions;
-const {USER_NOT_FOUND} = errors;
+const {USER_NOT_FOUND, PHOTO_NOT_FOUND_TO_DELETE} = errors;
 const {NOT_FOUND, OK} = httpStatusCodes;
+const {USER} = modelNames;
 
 module.exports = {
-    getAllUsers: async (req, res) => {
-
-        let users = await userService.getUsers();
-
-        res.json(users);
-    },
     createUser: async (req, res, next) => {
         try {
             const user = req.body;
@@ -26,14 +17,13 @@ module.exports = {
             user.password = await hashPassword(user.password);
 
             const {id} = await userService.createUser(user);
-            const photosDir = `users/${id}/photos`;
-            const fileExtension = avatar.name.split('.').pop();
-            const photoName = `${uuid}.${fileExtension}`;
 
-            await fsExtra.mkdir(resolve(process.cwd(), 'public', photosDir), {recursive: true});
-            await avatar.mv(resolve(process.cwd(), 'public', photosDir, photoName));
+            if (avatar) {
+                const photosDir = `users/${id}/photos`;
 
-            await userService.updateUserById(id, {photo: `${photosDir}/${photoName}`})
+                await photoService.addPhoto(avatar, USER, photosDir, id);
+            }
+
             await mailerService.sendMail(user.email, USER_CREATE, {
                 userName: user.name,
             });
@@ -43,15 +33,14 @@ module.exports = {
         catch (e) {
             return next(new ErrorsHandler(e));
         }
-
     },
 
     deleteUser: async (req, res, next) => {
-        const {id} = req.params;
+        const {userId} = req;
 
-        const userInfo = await userService.getUserByParams({id});
+        const userInfo = await userService.getUserByParams({userId});
 
-        const isDeleted = await userService.deleteUser(+id);
+        const isDeleted = await userService.deleteUser(+userId);
 
         if (!userInfo || !isDeleted) {
             return next(new ErrorsHandler(USER_NOT_FOUND.message, NOT_FOUND, USER_NOT_FOUND.code));
@@ -62,6 +51,30 @@ module.exports = {
         });
 
         res.sendStatus(OK);
-    }
+    },
 
+    deleteUserPhoto: async (req, res, next) => {
+        try {
+            const [isDeleted] = await photoService.removePhoto(USER, req.userId);
+
+            if (!isDeleted) {
+                return next(new ErrorsHandler(
+                    PHOTO_NOT_FOUND_TO_DELETE.message,
+                    NOT_FOUND,
+                    PHOTO_NOT_FOUND_TO_DELETE.code));
+            }
+
+            res.sendStatus(OK);
+        }
+        catch (e) {
+            return next (new ErrorsHandler(e))
+        }
+    },
+
+    getAllUsers: async (req, res) => {
+
+        let users = await userService.getUsers();
+
+        res.json(users);
+    },
 }

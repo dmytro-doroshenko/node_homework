@@ -32,18 +32,18 @@ module.exports = {
     ],
     MAX_AUDIO_SIZE: 15 * 1024 * 1024, // 15 MB
     MAX_DOC_SIZE: 10 * 1024 * 1024, // 10 MB
-    MAX_PHOTO_SIZE: 5 * 1024 * 1024, // 5 MB
+    MAX_PHOTO_SIZE: 3 * 1024 * 1024, // 3 MB
     MAX_VIDEO_SIZE: 200 * 1024 * 1024, // 200 MB
     PHOTO_MIMETYPES: [
-        'image/gif',
+        // 'image/gif',
         'image/jpeg',
         'image/png',
-        'image/pjpeg',
-        'image/svg+xml',
-        'image/tiff',
-        'image/vnd.microsoft.icon',
-        'image/vnd.wap.wbmp',
-        'image/webp',
+        // 'image/pjpeg',
+        // 'image/svg+xml',
+        // 'image/tiff',
+        // 'image/vnd.microsoft.icon',
+        // 'image/vnd.wap.wbmp',
+        // 'image/webp',
     ],
     VIDEO_MIMETYPES: [
         'video/3gpp',
