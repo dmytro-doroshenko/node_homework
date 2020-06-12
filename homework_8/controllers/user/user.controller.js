@@ -52,16 +52,16 @@ module.exports = {
         const userInfo = await userService.getUserByParams({id});
 
         const isDeleted = await userService.deleteUser(+id);
-        console.log('isDeleted', isDeleted)
+
         if (!userInfo || !isDeleted) {
-            return next(new ErrorsHandler(USER_NOT_FOUND.message, NOT_FOUND, USER_NOT_FOUND.code))
+            return next(new ErrorsHandler(USER_NOT_FOUND.message, NOT_FOUND, USER_NOT_FOUND.code));
         }
 
         await mailerService.sendMail(userInfo.dataValues.email, USER_DELETE, {
             userEmail: userInfo.dataValues.email
         });
 
-        res.sendStatus(OK)
+        res.sendStatus(OK);
     }
 
 }

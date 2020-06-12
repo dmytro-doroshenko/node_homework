@@ -3,8 +3,8 @@ const {checkHashPassword, tokensCreator} = require('../../helper');
 const {errors, httpStatusCodes, requestHeaders} = require('../../constants');
 
 const {USER_NOT_FOUND} = errors;
-const {AUTHORIZATION} = requestHeaders;
 const {NOT_FOUND, OK} = httpStatusCodes;
+const {AUTHORIZATION} = requestHeaders;
 
 module.exports = {
     loginUser: async (req, res, next) => {
